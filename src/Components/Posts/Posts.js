@@ -1,10 +1,35 @@
-import React from 'react';
-
-import Heart from '../../assets/Heart';
-import './Post.css';
+import React, { useEffect, useContext, useState } from "react";
+import {useNavigate } from "react-router-dom";
+import Heart from "../../assets/Heart";
+import "./Post.css";
+import { FirebaseContext } from "../../Store/FirebaseContext";
+import { PostContext } from "../../Store/PostContext";
 
 function Posts() {
+  const navigate = useNavigate()
+  const { firebase } = useContext(FirebaseContext);
+  const [products, setProducts] = useState([]);
+  const {setPostDetails} = useContext(PostContext)
+ 
 
+
+  useEffect(() => {
+    firebase
+      .firestore()
+      .collection("products")
+      .get()
+      .then((snapshot) => {
+        const allPost = snapshot.docs.map((product) => {
+          return {
+            ...product.data(),
+            id: product.id,
+          };
+        });
+        console.log("Total products :", allPost);
+        setProducts(allPost);
+
+      });
+  }, [firebase]);
   return (
     <div className="postParentDiv">
       <div className="moreView">
@@ -13,24 +38,28 @@ function Posts() {
           <span>View more</span>
         </div>
         <div className="cards">
-          <div
-            className="card"
-          >
-            <div className="favorite">
-              <Heart></Heart>
-            </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>Tue May 04 2021</span>
-            </div>
-          </div>
+          {products.map((product) => {
+            console.log(product)
+            return (
+              <div className="card" onClick={()=>{setPostDetails(product);navigate('/view')}} >
+               {console.log(product)}
+                <div className="favorite">
+                  <Heart></Heart>
+                </div>
+                <div className="image">
+                  <img src={product.url} alt="" />
+                </div>
+                <div className="content">
+                  <p className="rate">&#x20B9; {product.price}</p>
+                  <span className="kilometer">{product.name}</span>
+                  <p className="name"> {product.category}</p>
+                </div>
+                <div className="date">
+                  <span>{product.createdAt}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
       <div className="recommendations">

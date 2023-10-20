@@ -85,8 +85,7 @@
 }
 
 .language span {
-  /* justify-content: space-between;
-  align-items: center; */
+
   font-size: 15px;
   white-space: normal;
   text-overflow: ellipsis;
@@ -94,8 +93,7 @@
   margin-right: 5px;
 }
 
-.language svg {
-}
+
 
 .span {
   text-decoration: none;
