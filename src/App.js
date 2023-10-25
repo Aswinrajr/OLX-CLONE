@@ -9,6 +9,8 @@ import LoginPage from "./Pages/Login";
 import Create from "./Pages/Create";
 import ViewPost from "./Pages/ViewPost";
 import Post from "./Store/PostContext";
+import PageNotfound from "./Components/PageNotfound";
+
 
 function App() {
   const { setUser } = useContext(AuthContext);
@@ -32,6 +34,8 @@ function App() {
             <Route path="/create" element={<Create />} />
 
             <Route path="/view" element={<ViewPost />} />
+
+            <Route path="/*" element={<PageNotfound />} />
           </Routes>
         </Router>
       </Post>
